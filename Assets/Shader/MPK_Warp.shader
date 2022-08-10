@@ -16,7 +16,7 @@
 		SubShader
 		 {
 			 // No culling or depth
-			 //Cull Off ZWrite Off ZTest Always
+			 Cull Off ZWrite Off ZTest Less
 
 			 Pass
 			 {
@@ -91,15 +91,14 @@
 									 float2 p2 = float2(0.333333, 0) - _wp12.zw;
 									 float2 p3 = float2(0.666666, 0) - _wp34.xy;
 									 float2 p4 = float2(1, 0) - _wp34.zw;
-									 float2 p5 = float2(1, 0.333333) - _wp56.xy;
-									 float2 p6 = float2(1, 0.666666) - _wp56.zw;
+									 float2 p5 = float2(1, 0.333333) - float2(_wp56.x, -_wp56.y);
+									 float2 p6 = float2(1, 0.666666) + -float2(_wp56.z, -_wp56.w);
 									 float2 p7 = float2(1, 1) - _wp78.xy;
 									 float2 p8 = float2(0.666666, 1) - _wp78.zw;
 									 float2 p9 = float2(0.333333, 1) - _wp910.xy;
 									 float2 p10 = float2(0, 1) - _wp910.zw;
-
-									 float2 p11 = float2(0, 0.666666) + _wp1112.xy;
-									 float2 p12 = float2(0, 0.333333) + _wp1112.zw;
+									 float2 p11 = float2(0, 0.666666) +float2( _wp1112.x, _wp1112.y);
+									 float2 p12 = float2(0, 0.333333) +float2( _wp1112.z,_wp1112.w);
 
 									 float2 brx = berneshtine(p1, p2, p3, p4, uv.x);
 									 float2 brx2 = berneshtine(p7, p8, p9, p10, 1 - uv.x);
@@ -110,7 +109,7 @@
 									 float2 xl = lerp(brx, brx2, uv.y);
 									 float2 yl = lerp(bry, bry2, 1 - uv.x);
 
-									 uv = lerp(xl, yl, uv - 0.5);
+									 uv = lerp(xl, yl,float2( uv.x-0.5,uv.y-1) );
 								 }
 								 o.uv = uv;
 								 return o;
